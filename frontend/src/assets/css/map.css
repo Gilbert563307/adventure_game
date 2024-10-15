@@ -1,0 +1,39 @@
+.map-grid {
+  /* display: grid;
+  grid-template-columns: repeat(10, 1fr); */
+  /* grid-template-rows: repeat(18, 1fr); */
+  display: flex;
+  flex-direction: column;
+}
+
+.block {
+  height: 100px;
+  width: 100px;
+  border:  1px solid black;
+  text-align: center;
+}
+
+.air {
+  background-color: #fff;
+}
+
+.grass {
+  background-color: #3E5E36;
+}
+
+.stone {
+  background-color: #ACACAD;
+}
+
+.water {
+  background-color: #33549A;
+}
+
+.dirt {
+  background-color: #704E35;
+}
+
+.grid_flex {
+  display: flex;
+  flex-direction: row;
+}
