@@ -6,6 +6,8 @@ import {
 import MainController from './MainController';
 import CollectRenderMap from '../view/CollectRenderMap';
 import ErrorPage from '../view/error/ErrorPage';
+import MapController from './MapController';
+import LandingPage from '../view/pages/LandingPage';
 
 
 const router = createBrowserRouter([
@@ -19,9 +21,20 @@ const router = createBrowserRouter([
                 index: true,
                 path: "",
                 element: (
-                    <CollectRenderMap></CollectRenderMap>
-                )
+                    <LandingPage></LandingPage>
+                ),
             },
+            {
+                path: "/home",
+                element: <MapController />,
+                children: [
+                    {
+                        index: true,
+                        path: "",
+                        element: <CollectRenderMap></CollectRenderMap>
+                    }
+                ]
+            }
         ],
         errorElement: <ErrorPage />,
     },

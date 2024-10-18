@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useReducer } from 'react'
-import CollectRenderMap from '../view/CollectRenderMap'
 import { Outlet } from 'react-router-dom'
 
 
 /**
  * @typedef {Object} MainControllerState
- * @property {Array<Chunk>} chunks
+ * @property {Array<Chunk>} grid
  * @property {Object} player
  */
 
@@ -15,17 +14,18 @@ import { Outlet } from 'react-router-dom'
  * @type {MainControllerState}
  */
 const initialState = {
-  chunks: [],
+  grid: [],
   player: {},
 }
 
 export const MAIN_CONTROLLER_ACTIONS = {
-  MOVE_PLAYER: "MOVE_PLAYER"
+  MOVE_PLAYER: "MOVE_PLAYER",
+  FETCH_GRID: "FETCH_GRID",
 }
 
 /**
  * @typedef {Object} ContextValue
- * @property {InitialState} state - Current state.
+ * @property {MainControllerState} state - Current state.
  * @property {(object: {type: string, payload?: any}) => void} dispatch - Dispatch function.
  */
 const MainControllerContext = createContext({
@@ -52,6 +52,7 @@ export default function MainController() {
   const REDUCER_ACTIONS = {
     SET_PLAYER: "SET_PLAYER",
     SET_CHUNKS: "SET_CHUNKS",
+    SET_GRID: "SET_GRID",
   }
 
   /**
@@ -66,6 +67,12 @@ export default function MainController() {
         return {
           ...state,
           chunks: action.payload
+        }
+
+      case REDUCER_ACTIONS.SET_GRID:
+        return {
+          ...state,
+          grid: action.payload
         }
 
       case REDUCER_ACTIONS.SET_PLAYER:
@@ -83,11 +90,24 @@ export default function MainController() {
   const [state, dispatchAction] = useReducer(reducer, initialState);
 
 
+  const collectFetchGrid = () => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+
   const dispatch = (/** @type {{ type: string; payload?: any; }} */action) => {
     try {
       switch (action.type) {
         case MAIN_CONTROLLER_ACTIONS.MOVE_PLAYER:
           collectMovePLayer(action?.payload);
+          break;
+
+        case MAIN_CONTROLLER_ACTIONS.FETCH_GRID:
+          collectFetchGrid();
           break;
 
         default:
@@ -98,10 +118,10 @@ export default function MainController() {
 
     }
   }
-
+  const contextValue = { state, dispatch }
   return (
-    <MainControllerContext.Provider>
-      <Outlet/>
+    <MainControllerContext.Provider value={contextValue}>
+      <Outlet />
     </MainControllerContext.Provider>
   )
 }
