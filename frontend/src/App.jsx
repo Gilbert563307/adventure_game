@@ -1,13 +1,13 @@
 
-import CollectRenderMap from './view/CollectRenderMap'
+import { RouterProvider } from 'react-router-dom'
+import router from './controller/router'
+
 import "./assets/css/map.css"
-import MainController from './controller/MainController'
 import "./assets/css/index.css"
 
 function App() {
   return (
-    <MainController>
-    </MainController>
+    <RouterProvider router={router}></RouterProvider>
   )
 }
 

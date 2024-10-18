@@ -2,7 +2,6 @@ import React from 'react'
 
 export default function CollectRenderMap() {
 
-
   function createGrid() {
     const grid = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
     const grid_map_width = 10;
