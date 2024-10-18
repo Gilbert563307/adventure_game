@@ -9,28 +9,38 @@
 .block {
   height: 100px;
   width: 100px;
-  border:  1px solid black;
+  /* border:  1px solid transparent; */
   text-align: center;
+  background-size: cover; /* To make sure the image covers the entire background */
+  background-repeat: no-repeat; /* Prevents repeating the image */
+  background-position: center center; /* Centers the image */
 }
 
 .air {
-  background-color: #fff;
+  background-color: #cfecf7;
 }
 
 .grass {
-  background-color: #3E5E36;
+  /* background-color: #3E5E36; */
+  object-fit: contain;
+  background-image: url("../textures/blocks/grass_block.webp");
 }
 
 .stone {
   background-color: #ACACAD;
+  background-image: url("../textures/blocks/stone_block.webp");
+
 }
 
 .water {
   background-color: #33549A;
+  background-image: url("../textures/blocks/water_block.jpeg");
+
 }
 
 .dirt {
   background-color: #704E35;
+  background-image: url("../textures/blocks/dirt_block.webp");
 }
 
 .grid_flex {
