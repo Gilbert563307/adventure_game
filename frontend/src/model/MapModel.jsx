@@ -45,12 +45,16 @@ export default function MapModel() {
       //adding the grass,water,stone blocks
       const groud_grid = [[], [], [], []]
 
-      for (let index = -3; index < 1; index++) {
-        const arr_index = Math.abs(index)
+      for (let y_arr_index = -3; y_arr_index < 1; y_arr_index++) {
+        const arr_index = Math.abs(y_arr_index)
         const meta_data = getMetaData(arr_index);
 
+        
         for (let col = 0; col < grid_map_width; col++) {
-          const block_obj = { "cords": { "y": index, "x": col, }, "meta_data": meta_data }
+          //this is for the visual bevause arrays count from 0 other wise we would have two zero points in the grid
+          const y_level_to_show =  (y_arr_index + -1)
+          
+          const block_obj = { "cords": { "y": y_level_to_show, "x": col, }, "meta_data": meta_data }
           groud_grid[arr_index].push(block_obj)
         }
       }

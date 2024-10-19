@@ -4,6 +4,7 @@ import router from './controller/router'
 
 import "./assets/css/map.css"
 import "./assets/css/index.css"
+import "./assets/css/player/player.css"
 
 function App() {
   return (

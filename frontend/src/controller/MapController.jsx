@@ -2,13 +2,36 @@ import React, { createContext, useContext, useReducer } from 'react'
 
 import { Outlet } from 'react-router-dom'
 import MapModel from '../model/MapModel'
+import PlayerController from './PlayerController'
+import PlayerModel from '../model/PlayerModel'
+
+/**
+ * @typedef {Object} BlockMetaData
+ * @property {string} block_name - The name of the block.
+ * @property {string} block_type - The type of the block.
+ * @property {string} class - The class of the block.
+ */
+
+/**
+ * @typedef {Object} BlockCoordinates
+ * @property {number} y - The y-coordinate of the block.
+ * @property {number} x - The x-coordinate of the block.
+ */
+
+/**
+ * @typedef {Object} MapBlock
+ * @property {BlockCoordinates} cords - The coordinates of the block.
+ * @property {BlockMetaData} meta_data - Meta data about the block.
+ */
+
+/**
+ * @typedef {Array<MapBlock>} MapArray - Array of map blocks.
+ */
 
 /**
  * @typedef {Object} MapControllerState
- * @property {Array<Chunk>} map
-
+ * @property {MapArray} map - Array of blocks with coordinates and meta data.
  */
-
 
 /**
  * Initial state for the controller.
@@ -51,6 +74,7 @@ export const useMapControllerContext = () => {
 export default function MapController() {
 
     const { createMapGrid } = MapModel();
+    const { getMapWithPlayer } = PlayerModel();
 
     const REDUCER_ACTIONS = {
         SET_MAP: "SET_PLAYER",
@@ -86,8 +110,9 @@ export default function MapController() {
     const init = () => {
         try {
             const map = createMapGrid();
+            const updated_map = getMapWithPlayer(map.grid)
             return {
-                map: map.grid
+                map: updated_map.grid
             }
         } catch (error) {
             console.error("Error initializing map:", error);
@@ -123,7 +148,9 @@ export default function MapController() {
 
     return (
         <MapControllerContext.Provider value={contextValue}>
-            <Outlet></Outlet>
+            <PlayerController>
+                <Outlet></Outlet>
+            </PlayerController>
         </MapControllerContext.Provider>
 
     )
