@@ -27,7 +27,7 @@ export default function MapModel() {
    * 
    * @returns {{error: boolean, grid:Array<Chunk>}}
    */
-  function createGrid() {
+  function createMapGrid() {
     try {
       const grid = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], []]
       const grid_map_width = 10;
@@ -63,5 +63,5 @@ export default function MapModel() {
       return { error: true, grid: [] }
     }
   }
-  return { createGrid }
+  return { createMapGrid }
 }

@@ -2,10 +2,9 @@ import React from 'react'
 import useGetGridHook from '../hooks/useGetGridHook'
 
 export default function CollectRenderMap() {
-  const { grid } = useGetGridHook()
+  const { map } = useGetGridHook()
 
   function renderMap(map_grid) {
-
     return map_grid.map((arr, index) => {
       const rows = arr
       const id_key = `row-${index}`
@@ -23,8 +22,7 @@ export default function CollectRenderMap() {
 
   return (
     <section className='map-grid'>
-      <h1>hello</h1>
-      {renderMap(grid)}
+      {renderMap(map)}
     </section>
   )
 }

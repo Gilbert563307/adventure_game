@@ -25,13 +25,13 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: "/home",
+                path: "/main",
                 element: <MapController />,
                 children: [
                     {
                         index: true,
                         path: "",
-                        element: <CollectRenderMap></CollectRenderMap>
+                        element: <CollectRenderMap/>
                     }
                 ]
             }
