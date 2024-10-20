@@ -25,6 +25,17 @@ export default function MapModel() {
 
   /**
    * 
+   * @returns {{mineable: boolean, active: boolean}}
+   */
+  function getBlockStatus() {
+    return {
+      "mineable": true,
+      "active": true,
+    }
+  }
+
+  /**
+   * 
    * @returns {{error: boolean, grid:Array<Chunk>}}
    */
   function createMapGrid() {
@@ -36,7 +47,15 @@ export default function MapModel() {
       const max_air_blocks = grid.length
       for (let index = 0; index < max_air_blocks; index++) {
         for (let col = 0; col < grid_map_width; col++) {
-          const object = { "cords": { "y": index, "x": col, }, "meta_data": { "block_name": "air", "block_type": "air", "class": "air" } }
+          const object = {
+            "cords": { "y": index, "x": col, },
+            "meta_data": { "block_name": "air", "block_type": "air", "class": "air", },
+            "status": {
+              "mineable": false,
+              //TODO think about better property name
+              "active": true,
+            }
+          }
           grid[index].push(object)
 
         }
@@ -49,12 +68,13 @@ export default function MapModel() {
         const arr_index = Math.abs(y_arr_index)
         const meta_data = getMetaData(arr_index);
 
-        
+
         for (let col = 0; col < grid_map_width; col++) {
           //this is for the visual bevause arrays count from 0 other wise we would have two zero points in the grid
-          const y_level_to_show =  (y_arr_index + -1)
-          
-          const block_obj = { "cords": { "y": y_level_to_show, "x": col, }, "meta_data": meta_data }
+          const y_level_to_show = (y_arr_index + -1)
+          const status = getBlockStatus();
+
+          const block_obj = { "cords": { "y": y_level_to_show, "x": col, }, "meta_data": meta_data, "status": status }
           groud_grid[arr_index].push(block_obj)
         }
       }

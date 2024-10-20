@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useGetGridHook from '../hooks/useGetGridHook'
 
 export default function CollectRenderMap() {
-  const { map } = useGetGridHook()
+  const { map } = useGetGridHook();
+
+  useEffect(() => {
+    // console.log(`cahing ${JSON.stringify(map)}`)
+  }, [map])
 
   function renderMap(map_grid) {
     return map_grid.map((arr, index) => {

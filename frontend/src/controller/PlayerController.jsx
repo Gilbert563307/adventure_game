@@ -1,11 +1,14 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import CollectRenderPlayer from '../view/player/CollectRenderPlayer'
+import usePlayerMoveHook from '../hooks/usePlayerMoveHook'
+
+
 
 export default function PlayerController() {
+
+    usePlayerMoveHook();
     return (
         <div>
-            <CollectRenderPlayer/>
             <Outlet></Outlet>
         </div>
     )

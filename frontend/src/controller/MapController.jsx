@@ -44,6 +44,7 @@ const initialState = {
 export const MAP_CONTROLLER_ACTIONS = {
     FETCH_MAP: "FETCH_MAP",
     UPDATE_MAP: "UPDATE_MAP",
+    MOVE_PLAYER: "MOVE_PLAYER",
 }
 
 /**
@@ -74,7 +75,7 @@ export const useMapControllerContext = () => {
 export default function MapController() {
 
     const { createMapGrid } = MapModel();
-    const { getMapWithPlayer } = PlayerModel();
+    const { getMapWithPlayer, updateMapByPlayerMove } = PlayerModel();
 
     const REDUCER_ACTIONS = {
         SET_MAP: "SET_PLAYER",
@@ -125,16 +126,34 @@ export default function MapController() {
     // Defining the state and the dispatchAction using the useReducer hook
     const [state, dispatchAction] = useReducer(reducer, initialState, init);
 
+
+    const collectMovePlayer = (direction) => {
+        try {
+            const updatedMap = updateMapByPlayerMove(state.map, direction);
+            dispatchAction({
+                type: REDUCER_ACTIONS.UPDATE_MAP,
+                payload: updatedMap.grid, 
+            });
+        } catch (error) {
+            console.log(error);
+            throw new Error();
+        }
+    };
+
     const dispatch = (/** @type {{ type: string; payload?: any; }} */action) => {
         try {
             switch (action.type) {
                 case MAP_CONTROLLER_ACTIONS.FETCH_MAP:
 
-                    break;
+                    return;
 
                 case MAP_CONTROLLER_ACTIONS.UPDATE_MAP:
 
-                    break;
+                    return;
+
+                case MAP_CONTROLLER_ACTIONS.MOVE_PLAYER:
+                    collectMovePlayer(action.payload)
+                    return;
 
                 default:
                     break;
