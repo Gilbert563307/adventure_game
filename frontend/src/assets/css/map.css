@@ -1,9 +1,6 @@
 .map-grid {
-  /* display: grid;
-  grid-template-columns: repeat(10, 1fr); */
-  /* grid-template-rows: repeat(18, 1fr); */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .block {
@@ -11,9 +8,12 @@
   width: 100px;
   /* border:  1px solid transparent; */
   text-align: center;
-  background-size: cover; /* To make sure the image covers the entire background */
-  background-repeat: no-repeat; /* Prevents repeating the image */
-  background-position: center center; /* Centers the image */
+  background-size: cover;
+  /* To make sure the image covers the entire background */
+  background-repeat: no-repeat;
+  /* Prevents repeating the image */
+  background-position: center center;
+  /* Centers the image */
 }
 
 .air {
@@ -46,4 +46,8 @@
 .grid_flex {
   display: flex;
   flex-direction: row;
+}
+
+.chunk{
+  border:  10px solid black;
 }

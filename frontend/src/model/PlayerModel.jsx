@@ -52,7 +52,7 @@ export default function PlayerModel() {
       const updated_grid_map = grid_map.map((arr) => {
         return arr.map((
           /**
-           * @type {import("../controller/MapController").MapBlock}
+           * @type {import("../types/types").MapBlock}
            */ row) => {
 
           // Check if the row has the coordinates x == 0 and y == 0
@@ -130,7 +130,7 @@ export default function PlayerModel() {
 
       for (let row_index = 0; row_index < columns.length; row_index++) {
         /**
-         * @type {import("../controller/MapController").MapBlock}
+         * @type {import("../types/types").MapBlock}
          */
         const row = columns[row_index];
 
@@ -176,7 +176,7 @@ export default function PlayerModel() {
         for (let row_i = 0; row_i < columns.length; row_i++) {
 
           /**
-         * @type {import("../controller/MapController").MapBlock}
+         * @type {import("../types/types").MapBlock}
          */
           const row = columns[row_i];
 

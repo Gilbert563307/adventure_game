@@ -5,27 +5,9 @@ import MapModel from '../model/MapModel'
 import PlayerController from './PlayerController'
 import PlayerModel from '../model/PlayerModel'
 
-/**
- * @typedef {Object} BlockMetaData
- * @property {string} block_name - The name of the block.
- * @property {string} block_type - The type of the block.
- * @property {string} class - The class of the block.
- */
 
 /**
- * @typedef {Object} BlockCoordinates
- * @property {number} y - The y-coordinate of the block.
- * @property {number} x - The x-coordinate of the block.
- */
-
-/**
- * @typedef {Object} MapBlock
- * @property {BlockCoordinates} cords - The coordinates of the block.
- * @property {BlockMetaData} meta_data - Meta data about the block.
- */
-
-/**
- * @typedef {Array<MapBlock>} MapArray - Array of map blocks.
+ * @typedef {Array<import("../types/types").MapBlock>} MapArray - Array of map blocks.
  */
 
 /**
@@ -74,7 +56,7 @@ export const useMapControllerContext = () => {
 
 export default function MapController() {
 
-    const { createMapGrid } = MapModel();
+    const { createMapWithChunks } = MapModel();
     const { getMapWithPlayer, updateMapByPlayerMove } = PlayerModel();
 
     const REDUCER_ACTIONS = {
@@ -110,10 +92,10 @@ export default function MapController() {
 
     const init = () => {
         try {
-            const map = createMapGrid();
-            const updated_map = getMapWithPlayer(map.grid)
+            const map = createMapWithChunks();
+            console.log(JSON.stringify(map))
             return {
-                map: updated_map.grid
+                map: map
             }
         } catch (error) {
             console.error("Error initializing map:", error);
@@ -132,7 +114,7 @@ export default function MapController() {
             const updatedMap = updateMapByPlayerMove(state.map, direction);
             dispatchAction({
                 type: REDUCER_ACTIONS.UPDATE_MAP,
-                payload: updatedMap.grid, 
+                payload: updatedMap.grid,
             });
         } catch (error) {
             console.log(error);
