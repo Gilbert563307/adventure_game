@@ -21,26 +21,26 @@
 }
 
 .grass {
-  background-color: #526935;
-  /* object-fit: contain; */
-  /* background-image: url("../textures/blocks/grass_block.webp"); */
+  /* background-color: #526935; */
+  object-fit: contain;
+  background-image: url("../textures/blocks/grass_block.webp");
 }
 
 .stone {
   background-color: #ACACAD;
-  /* background-image: url("../textures/blocks/stone_block.webp"); */
+  background-image: url("../textures/blocks/stone_block.webp");
 
 }
 
 .water {
-  background-color: #33549A;
-  /* background-image: url("../textures/blocks/water_block.jpeg"); */
+  /* background-color: #33549A; */
+  background-image: url("../textures/blocks/water_block.jpeg");
 
 }
 
 .dirt {
-  background-color: #926C4D;
-  /* background-image: url("../textures/blocks/dirt_block.webp"); */
+  /* background-color: #926C4D; */
+  background-image: url("../textures/blocks/dirt_block.webp");
 }
 
 .grid_flex {
