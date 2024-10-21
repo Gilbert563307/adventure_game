@@ -21,6 +21,7 @@ import PlayerModel from '../model/PlayerModel'
  */
 const initialState = {
     map: [],
+    notifcation: { message: "", type: 0 }
 }
 
 export const MAP_CONTROLLER_ACTIONS = {
@@ -57,7 +58,7 @@ export const useMapControllerContext = () => {
 export default function MapController() {
 
     const { createMapWithChunks } = MapModel();
-    const { getMapWithPlayer, updateMapByPlayerMove } = PlayerModel();
+    const { updateMapByPlayerMove } = PlayerModel();
 
     const REDUCER_ACTIONS = {
         SET_MAP: "SET_PLAYER",
@@ -90,12 +91,30 @@ export default function MapController() {
         }
     }
 
+
+    const setNotificationToState = (object) => {
+        // Set the message
+        dispatchAction({
+            type: REDUCER_ACTIONS.SET_NOTIFICATION,
+            payload: object,
+        });
+
+        // Remove message after 5 seconds
+        const timeoutId = setTimeout(() => {
+            closeAlert();
+        }, 5000);
+
+        // Clear timeout if needed
+        return () => clearTimeout(timeoutId);
+    };
+
     const init = () => {
         try {
-            const map = createMapWithChunks();
-            console.log(JSON.stringify(map))
+            const results = createMapWithChunks();
+            // console.log(JSON.stringify(map));
             return {
-                map: map
+                map: results.map,
+                notifcation: { message: results.message, type: results.type }
             }
         } catch (error) {
             console.error("Error initializing map:", error);

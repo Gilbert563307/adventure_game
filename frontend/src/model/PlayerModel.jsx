@@ -1,22 +1,13 @@
 import React from 'react'
 import { PLAYER_DIRECTIONS } from '../config/config';
 import MapModel from './MapModel';
+import Helpers from '../helpers/Helpers';
 
 export default function PlayerModel() {
 
   const { getMetaData } = MapModel();
+  const { getPlayerMetaData } = Helpers();
 
-  /**
-   * 
-   * @returns {import("../types/types").MetaData }
-   */
-  function getPlayerMetaData() {
-    return {
-      "block_name": "player",
-      "block_type": "player",
-      "class": "player",
-    };
-  }
 
   /**
    * 
@@ -41,38 +32,6 @@ export default function PlayerModel() {
   }
 
 
-  /**
-   * 
-   * @param {import("../controller/MapController").MapArray} grid_map 
-   * @returns {{error: boolean, grid: import("../controller/MapController").MapArray}}
-   */
-  const getMapWithPlayer = (grid_map) => {
-    try {
-
-      const updated_grid_map = grid_map.map((arr) => {
-        return arr.map((
-          /**
-           * @type {import("../types/types").MapBlock}
-           */ row) => {
-
-          // Check if the row has the coordinates x == 0 and y == 0
-          if (row.cords.x == 0 && row.cords.y == 0) {
-            // Update the row's meta_data
-            row.meta_data.block_name = "player";
-            row.meta_data.block_type = "player";
-            row.meta_data.class = "player";
-          }
-
-          // Return the row (either updated or not)
-          return row;
-        });
-      });
-
-      return { error: false, grid: updated_grid_map, message: "" }
-    } catch (error) {
-      return { error: true, grid: [], message: error }
-    }
-  }
 
   /**
    * 
@@ -205,5 +164,5 @@ export default function PlayerModel() {
     }
 
   }
-  return { getMapWithPlayer, updateMapByPlayerMove }
+  return { updateMapByPlayerMove }
 }

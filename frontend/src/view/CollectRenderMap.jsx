@@ -11,7 +11,7 @@ export default function CollectRenderMap() {
     for (const property in map) {
       const chunk_grid = map[property];
       // Push each rendered map to the array
-      renderedChunks.push(<div className='chunk'>{renderMap(chunk_grid)}</div>);
+      renderedChunks.push(<div className='chunk' key={property}>{renderMap(chunk_grid)}</div>);
     }
 
     return renderedChunks;

@@ -1,6 +1,51 @@
 import React from 'react'
+import Helpers from '../helpers/Helpers';
+import { ALERT_TYPES } from '../view/components/BS5Alert';
 
 export default function MapModel() {
+
+  const { getPlayerMetaData } = Helpers();
+
+
+  /**
+   * 
+   * @param {import("../types/types").Map} map 
+   * @returns {{map: import("../types/types").Map | {}, message: string, type: number}}
+   */
+  function getMapWithPlayer(map) {
+    try {
+      /**
+       * @type {string}
+       */
+      const chunk_one_uuid = Object.keys(map)[0];
+
+      //get the chunk
+      /**
+       * @type {import("../types/types").Chunk}
+       */
+      const chunk = map[chunk_one_uuid];
+
+      //get the ground level and thats y 10 and x 0;
+      /**
+       * @type {import("../types/types").Chunk}
+       */
+      const arr = chunk[10];
+
+      //get the first object of that chunk 
+      /**
+       *  @type {import("../types/types").ChunkBlock}
+       */
+      const start_block = arr[0];
+
+      // Update the row's meta_data by setting there a player;
+      start_block.meta_data = getPlayerMetaData();
+
+
+      return { map: map, message: "", type: ALERT_TYPES.SUCCESS };
+    } catch (error) {
+      return { map: [], message: error.message, type: ALERT_TYPES.SUCCESS };
+    }
+  }
 
   /**
    * 
@@ -21,7 +66,6 @@ export default function MapModel() {
       "located_at": { "chunk_uuid": chunk_uuid, "chunk_block_arr_index": y, "chunk_block_row_index": x }
     }
   }
-
 
   /**
    * 
@@ -57,38 +101,43 @@ export default function MapModel() {
 
 
   function createMapWithChunks() {
-    //create 5 starting chunks in the map object each with a unique id
-    /** @type {import("../types/types").Map}) */
-    const map = {
-      "77ed7eb1-df84-4ae7-b8fb-72a62025a37e": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
-      "bebd290d-af15-4bf9-b6b5-2901cbbf3c07": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
-      "f8ac2c2b-ef35-4636-b3a2-ff72ba95013d": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
-      "7eea79a4-9ff5-45f0-83b2-f6b67779670f": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
-      "4914657a-ae0f-470c-bffd-fb66d14008f0": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
-    };
+    try {
+      //create 5 starting chunks in the map object each with a unique id
+      /** @type {import("../types/types").Map}) */
+      const map = {
+        "77ed7eb1-df84-4ae7-b8fb-72a62025a37e": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
+        "bebd290d-af15-4bf9-b6b5-2901cbbf3c07": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
+        "f8ac2c2b-ef35-4636-b3a2-ff72ba95013d": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
+        "7eea79a4-9ff5-45f0-83b2-f6b67779670f": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
+        "4914657a-ae0f-470c-bffd-fb66d14008f0": [[], [], [], [], [], [], [], [], [], [], [],  /** gorund */[], [], [], []],
+      };
 
-    // const max_air_blocks = 10;
-    const chunk_width = 10;
+      // const max_air_blocks = 10;
+      const chunk_width = 2;
 
-    // loop through each chunk
-    for (const property in map) {
-      const chunk_uuid = property;
-      /**
-       * @type {import("../types/types").Chunk}
-       */
-      //chunk grid parent arr
-      const chunk_grid = map[property];
+      // loop through each chunk
+      for (const property in map) {
+        const chunk_uuid = property;
+        /**
+         * @type {import("../types/types").Chunk}
+         */
+        //chunk grid parent arr
+        const chunk_grid = map[property];
 
-      for (let index = 0; index < chunk_grid.length; index++) {
-        for (let col = 0; col < chunk_width; col++) {
-          const chunk = createChunkObjectBy(index, col, chunk_uuid);
-          chunk_grid[index].push(chunk);
+        for (let index = 0; index < chunk_grid.length; index++) {
+          for (let col = 0; col < chunk_width; col++) {
+            const chunk = createChunkObjectBy(index, col, chunk_uuid);
+            chunk_grid[index].push(chunk);
+          }
         }
-      }
 
+      }
+      const map_with_player = getMapWithPlayer(map);
+      return { map: map_with_player.map, message: "", type: ALERT_TYPES.SUCCESS };
+    } catch (error) {
+      return { map: [], message: error.message, type: ALERT_TYPES.SUCCESS };
     }
 
-    return map;
   }
   return { createMapWithChunks }
 }
