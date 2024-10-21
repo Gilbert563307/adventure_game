@@ -7,17 +7,9 @@ export default function PlayerModel() {
   const { getMetaData } = MapModel();
 
   /**
- * Retrieves the metadata for the player block.
- * 
- * @returns {Object} An object containing metadata for the player block.
- * @returns {string} return.block_name - The name of the block, which is "player".
- * @returns {string} return.block_type - The type of the block, which is "player".
- * @returns {string} return.class - The CSS class or classification for the player block.
- * 
- * @description
- * This function returns metadata information associated with the player block, which includes
- * the block name, type, and class. This data can be used to identify or style the player block.
- */
+   * 
+   * @returns {import("../types/types").MetaData }
+   */
   function getPlayerMetaData() {
     return {
       "block_name": "player",
@@ -26,6 +18,21 @@ export default function PlayerModel() {
     };
   }
 
+  /**
+   * 
+   * @param {import()} cords 
+   * @returns {number}
+   */
+  function calculateUpMoveMent(cords) {
+    const max_jump = 1;
+    return (cords.y + 1) <= max_jump ? (cords.y + 1) : cords.y;
+  }
+
+  /**
+   * 
+   * @param {number} y_level 
+   * @returns {import("../types/types").MetaData }
+   */
   function getMetaDataByYCordinate(y_level) {
     if (y_level >= 0) {
       return { "block_name": "air", "block_type": "air", "class": "air", }
@@ -61,28 +68,18 @@ export default function PlayerModel() {
         });
       });
 
-      return { error: false, grid: updated_grid_map }
+      return { error: false, grid: updated_grid_map, message: "" }
     } catch (error) {
-      return { error: true, grid: [] }
+      return { error: true, grid: [], message: error }
     }
   }
 
   /**
- * Moves the player to new coordinates based on the given direction.
- * 
- * @param {Object} cords - The current coordinates of the player.
- * @param {number} cords.x - The player's current x-coordinate (horizontal).
- * @param {number} cords.y - The player's current y-coordinate (vertical).
- * @param {string} direction - The direction in which the player wants to move. Should be one of the PLAYER_DIRECTIONS (UP, DOWN, LEFT, RIGHT).
- * 
- * @returns {Object} The new coordinates of the player after attempting to move.
- * 
- * @description 
- * - If the player is on the left edge (y = 0), certain movements (like left or down) are restricted.
- * - The player can move left, right, up, or down based on the current position and direction.
- * - If the player attempts to move outside allowed bounds (like left when y = 0), the coordinates will remain unchanged.
- * - The player can "jump" upwards (y increases) and be reset slowly to the ground.
- */
+   * 
+   * @param {import("../types/types").cords} cords 
+   * @param {import("../types/types").direction} direction 
+   * @returns {import("../types/types").cords}
+   */
   function movePlayerToNewCord(cords, direction) {
     const r_chunk_one_edge = [9];
     const left_x_starting_point = 0;
@@ -100,15 +97,14 @@ export default function PlayerModel() {
       case PLAYER_DIRECTIONS.UP:
         //user can fly 
         // const new_up_cord = cords.y + 1 <= 14 ? cords.y + 1 : cords.y;
-
         //user can just jump;
-        const max_jump = 1;
-        const new_up_cord = (cords.y + 1) <= max_jump ? (cords.y + 1) : cords.y;
-
-        return { y: new_up_cord, x: cords.x };
+        {
+          const y = calculateUpMoveMent(cords);
+          return { y: y, x: cords.x };
+        }
 
       case PLAYER_DIRECTIONS.DOWN:
-        const n_y_cord = cords.y
+        // const n_y_cord = cords.y
         return cords;
 
       default:
@@ -118,22 +114,12 @@ export default function PlayerModel() {
 
 
   /**
-  * @typedef {Object} cordsToUpdateType
-  * @property {import("../controller/MapController").MapBlock} old_cords - The current block containing the player.
-  * @property {{mineable: boolean, active: boolean}} old_cords.status - The status of the block (mineable and active).
-  * @property {Object} new_cords - The new coordinates where the player will move.
-  * @property {number} new_cords.x - The x-coordinate of the new position.
-  * @property {number} new_cords.y - The y-coordinate of the new position.
-  */
-
-
-  /**
  * Retrieves the current player coordinates and the new coordinates based on the direction of movement.
  * 
  * @param {import("../controller/MapController").MapArray} map - The current of the map or grid.
  * @param {string} direction - The direction in which the player wants to move. Should be one of the PLAYER_DIRECTIONS (UP, DOWN, LEFT, RIGHT).
  * 
- * @returns {cordsToUpdateType}
+ * @returns {import("../types/types").cordsToUpdateType}
  */
   function getCordsToUpdate(map, direction) {
     const grid_map = map;
@@ -213,9 +199,9 @@ export default function PlayerModel() {
 
       //then return the new map grid
 
-      return { error: false, grid: grid_map }
+      return { message: "", grid: grid_map }
     } catch (error) {
-      return { error: true, grid: state.map }
+      return { message: error.message, grid: [], type: 0 }
     }
 
   }
