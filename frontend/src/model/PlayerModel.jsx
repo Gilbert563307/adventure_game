@@ -2,6 +2,7 @@ import React from 'react'
 import { PLAYER_DIRECTIONS } from '../config/config';
 import MapModel from './MapModel';
 import Helpers from '../helpers/Helpers';
+import { ALERT_TYPES } from '../view/components/BS5Alert';
 
 export default function PlayerModel() {
 
@@ -73,92 +74,78 @@ export default function PlayerModel() {
 
 
   /**
- * Retrieves the current player coordinates and the new coordinates based on the direction of movement.
- * 
- * @param {import("../controller/MapController").MapArray} map - The current of the map or grid.
- * @param {string} direction - The direction in which the player wants to move. Should be one of the PLAYER_DIRECTIONS (UP, DOWN, LEFT, RIGHT).
- * 
- * @returns {import("../types/types").cordsToUpdateType}
- */
-  function getCordsToUpdate(map, direction) {
-    const grid_map = map;
+   * 
+   * @param {{player: import("../types/types").Player, direction: string}} payload 
+   * @returns {{message: string, type: number, old_cords: import("../types/types").Cords, new_cords: import("../types/types").Cords}}
+   */
+  function getCordsToUpdate(payload) {
+    try {
+      //get the cordinations of where the player started from
+      const old_y = payload.player.located_at.chunk_block_arr_index;
+      const old_x = payload.player.located_at.chunk_block_row_index;
 
-    // Iterate through the grid map to find the player block
-    for (let index = 0; index < grid_map.length; index++) {
-      const columns = grid_map[index];
+      const old_cords = { y: old_y, x: old_x };
 
-      for (let row_index = 0; row_index < columns.length; row_index++) {
-        /**
-         * @type {import("../types/types").MapBlock}
-         */
-        const row = columns[row_index];
+      // Get the new coordinates based on the player's direction
+      const new_cords = movePlayerToNewCord(old_cords, direction);
 
-        // Check if the current block is the player block
-        if (row.meta_data.block_name === "player") {
-          const curr_player_row = row;
-          const curr_player_cords = curr_player_row.cords;
+      return { "message": "", "type": ALERT_TYPES.SUCCESS, "old_cords": old_cords, "new_cords": new_cords };
 
-          // Get the new coordinates based on the player's direction
-          const new_cords = movePlayerToNewCord(curr_player_cords, direction);
-          console.log(`curr_player_cords ${JSON.stringify(curr_player_cords)}`)
-          console.log(`new_cords ${JSON.stringify(new_cords)}`)
-
-          // Return the old and new coordinates for updating
-          return { "old_cords": curr_player_row, "new_cords": new_cords };
-        };
-      }
+    } catch (error) {
+      return { "message": error.message, "type": ALERT_TYPES.DANGER, "old_cords": {}, "new_cords": {} };
     }
 
-    // Return null coordinates if no player block is found
-    return { "old_cords": null, "new_cords": null };
   }
 
 
   /**
    * 
    * @param {import("../controller/MapController").MapArray} map 
-   * @param {*} direction 
+   * @param {{player: import("../types/types").Player, direction: string}} payload 
    * @returns 
    */
-  function updateMapByPlayerMove(map, direction) {
+  function updateMapByPlayerMove(map, payload) {
     try {
-      console.log(`updateMapByPlayerMove ${direction}`)
-      const grid_map = map;
-
       //when we get the new cordiantes
-      const cordiantions = getCordsToUpdate(map, direction);
 
-      //loop through the map and find the new cords;
-      for (let i = 0; i < grid_map.length; i++) {
-        const columns = grid_map[i];
+      console.log(`payload `);
+      console.log(payload);
 
-        for (let row_i = 0; row_i < columns.length; row_i++) {
+      const results = getCordsToUpdate(payload);
 
-          /**
-         * @type {import("../types/types").MapBlock}
-         */
-          const row = columns[row_i];
 
-          // check what block is supossed to be on the old cords x level;
-          if (row.cords === cordiantions.old_cords.cords) {
-            const old_cords_y_lvl = cordiantions.old_cords.cords.y;
 
-            //then replace the old cords of the player with that y level block
-            row.meta_data = getMetaDataByYCordinate(old_cords_y_lvl);
-          }
+      // //loop through the map and find the new cords;
+      // for (let i = 0; i < grid_map.length; i++) {
+      //   const columns = grid_map[i];
 
-          //get the free row, and check if it macthes with where the player wants to go
-          if (row.cords.y === cordiantions.new_cords.y && row.cords.x === cordiantions.new_cords.x) {
-            //set the player to the new cords;
-            row.meta_data = getPlayerMetaData();
-          }
-        }
+      //   for (let row_i = 0; row_i < columns.length; row_i++) {
 
-      }
+      //     /**
+      //    * @type {import("../types/types").MapBlock}
+      //    */
+      //     const row = columns[row_i];
+
+      //     // check what block is supossed to be on the old cords x level;
+      //     if (row.cords === cordiantions.old_cords.cords) {
+      //       const old_cords_y_lvl = cordiantions.old_cords.cords.y;
+
+      //       //then replace the old cords of the player with that y level block
+      //       row.meta_data = getMetaDataByYCordinate(old_cords_y_lvl);
+      //     }
+
+      //     //get the free row, and check if it macthes with where the player wants to go
+      //     if (row.cords.y === cordiantions.new_cords.y && row.cords.x === cordiantions.new_cords.x) {
+      //       //set the player to the new cords;
+      //       row.meta_data = getPlayerMetaData();
+      //     }
+      //   }
+
+      // }
 
       //then return the new map grid
 
-      return { message: "", grid: grid_map }
+      return { message: "", grid: map }
     } catch (error) {
       return { message: error.message, grid: [], type: 0 }
     }

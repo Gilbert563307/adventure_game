@@ -12,6 +12,7 @@ import PlayerModel from '../model/PlayerModel'
 
 /**
  * @typedef {Object} MapControllerState
+ * @property {import("../types/types").Player} player 
  * @property {MapArray} map - Array of blocks with coordinates and meta data.
  */
 
@@ -21,6 +22,7 @@ import PlayerModel from '../model/PlayerModel'
  */
 const initialState = {
     map: [],
+    player: {},
     notifcation: { message: "", type: 0 }
 }
 
@@ -114,6 +116,7 @@ export default function MapController() {
             // console.log(JSON.stringify(map));
             return {
                 map: results.map,
+                player: results.player,
                 notifcation: { message: results.message, type: results.type }
             }
         } catch (error) {
@@ -127,10 +130,14 @@ export default function MapController() {
     // Defining the state and the dispatchAction using the useReducer hook
     const [state, dispatchAction] = useReducer(reducer, initialState, init);
 
-
+    /**
+     * 
+     * @param {direction: string}  
+     */
     const collectMovePlayer = (direction) => {
         try {
-            const updatedMap = updateMapByPlayerMove(state.map, direction);
+            const payload = { "direction": direction, "player": state.player }
+            const updatedMap = updateMapByPlayerMove(state.map, payload);
             dispatchAction({
                 type: REDUCER_ACTIONS.UPDATE_MAP,
                 payload: updatedMap.grid,

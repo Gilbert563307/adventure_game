@@ -13,5 +13,20 @@ export default function Helpers() {
             "class": "player",
         };
     }
-    return { getPlayerMetaData }
+
+
+    /**
+     * 
+     * @param {import("../types/types").LocatedAt} located_at 
+     * @returns {import("../types/types").Player }
+     */
+    function initPlayerObject(located_at) {
+        return {
+            gamemode: 0,
+            gamhealthemode: 10,
+            inventory: [],
+            located_at: located_at,
+        }
+    }
+    return { getPlayerMetaData, initPlayerObject }
 }

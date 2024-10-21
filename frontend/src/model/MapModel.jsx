@@ -4,13 +4,13 @@ import { ALERT_TYPES } from '../view/components/BS5Alert';
 
 export default function MapModel() {
 
-  const { getPlayerMetaData } = Helpers();
+  const { getPlayerMetaData, initPlayerObject } = Helpers();
 
 
   /**
    * 
    * @param {import("../types/types").Map} map 
-   * @returns {{map: import("../types/types").Map | {}, message: string, type: number}}
+   * @returns {{map: import("../types/types").Map, player: import("../types/types").Player message: string, type: number}}
    */
   function getMapWithPlayer(map) {
     try {
@@ -35,15 +35,19 @@ export default function MapModel() {
       /**
        *  @type {import("../types/types").ChunkBlock}
        */
-      const start_block = arr[0];
+      const row = arr[0];
 
       // Update the row's meta_data by setting there a player;
-      start_block.meta_data = getPlayerMetaData();
+      row.meta_data = getPlayerMetaData();
 
+      //set the player info
+      const player = initPlayerObject(row.located_at);
 
-      return { map: map, message: "", type: ALERT_TYPES.SUCCESS };
+      return { map: map, player: player, message: "", type: ALERT_TYPES.SUCCESS, };
     } catch (error) {
-      return { map: [], message: error.message, type: ALERT_TYPES.SUCCESS };
+      return {
+        map: [], player: {}, message: error.message, type: ALERT_TYPES.SUCCESS
+      };
     }
   }
 
@@ -100,6 +104,10 @@ export default function MapModel() {
   }
 
 
+  /**
+  * 
+  * @returns {{map: import("../types/types").Map, player: import("../types/types").Player message: string, type: number}}
+  */
   function createMapWithChunks() {
     try {
       //create 5 starting chunks in the map object each with a unique id
@@ -113,7 +121,7 @@ export default function MapModel() {
       };
 
       // const max_air_blocks = 10;
-      const chunk_width = 2;
+      const chunk_width = 4;
 
       // loop through each chunk
       for (const property in map) {
@@ -133,9 +141,9 @@ export default function MapModel() {
 
       }
       const map_with_player = getMapWithPlayer(map);
-      return { map: map_with_player.map, message: "", type: ALERT_TYPES.SUCCESS };
+      return { map: map_with_player.map, player: map_with_player.player, message: "", type: ALERT_TYPES.SUCCESS };
     } catch (error) {
-      return { map: [], message: error.message, type: ALERT_TYPES.SUCCESS };
+      return { map: [], player: {}, message: error.message, type: ALERT_TYPES.SUCCESS };
     }
 
   }
