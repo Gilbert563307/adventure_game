@@ -103,7 +103,7 @@ export default function MapController() {
 
         // Remove message after 5 seconds
         const timeoutId = setTimeout(() => {
-            closeAlert();
+            //closeAlert();
         }, 5000);
 
         // Clear timeout if needed

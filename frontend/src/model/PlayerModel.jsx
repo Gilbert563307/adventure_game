@@ -41,6 +41,16 @@ export default function PlayerModel() {
    * @returns {import("../types/types").cords}
    */
   function movePlayerToNewCord(cords, direction) {
+    //we need to keep track of where the user wants to go:
+
+    //then we need to ad + 1 do the dir where the user wants to go;
+
+    //but if the user is on a chunk border;
+
+    //add the user to the starting point of the next chunk;
+    
+    //and return the cords
+
     const r_chunk_one_edge = [9];
     const left_x_starting_point = 0;
 
@@ -87,7 +97,7 @@ export default function PlayerModel() {
       const old_cords = { y: old_y, x: old_x };
 
       // Get the new coordinates based on the player's direction
-      const new_cords = movePlayerToNewCord(old_cords, direction);
+      const new_cords = movePlayerToNewCord(old_cords, payload.direction);
 
       return { "message": "", "type": ALERT_TYPES.SUCCESS, "old_cords": old_cords, "new_cords": new_cords };
 
